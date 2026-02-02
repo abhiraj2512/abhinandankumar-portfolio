@@ -4,8 +4,7 @@ A high-performance, responsive personal portfolio website built with **React**, 
 
 ## 🚀 Live Demo
 
-**[View Live Site](YOUR_VERCEL_URL_HERE)**  
-*(Replace with your actual Vercel deployment link)*
+**[View Live Site](https://abhinandankumar-portfolio.vercel.app/)**
 
 ## ✨ Features
 
