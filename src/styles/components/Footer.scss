@@ -1,0 +1,42 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.footer {
+    @include flex-center;
+    flex-direction: column;
+    padding: 25px;
+    text-align: center;
+    background-color: $color-bg;
+
+    &__socials {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+
+        @include mobile {
+            gap: 25px;
+        }
+
+        a {
+            font-size: 20px;
+            color: $color-text-secondary;
+
+            &:hover {
+                color: $color-primary;
+                transform: translateY(-3px);
+            }
+        }
+    }
+
+    &__copy {
+        p {
+            color: $color-text-secondary;
+            font-family: $font-mono;
+            font-size: 12px;
+
+            &:hover {
+                color: $color-primary;
+            }
+        }
+    }
+}

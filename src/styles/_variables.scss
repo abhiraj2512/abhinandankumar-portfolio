@@ -1,0 +1,27 @@
+// Palette
+$color-bg: var(--color-bg);
+$color-bg-light: var(--color-bg-light);
+$color-bg-lighter: var(--color-bg-lighter);
+$color-primary: var(--color-primary);
+$color-text-primary: var(--color-text-primary);
+$color-text-secondary: var(--color-text-secondary);
+$color-white: var(--color-white);
+
+// Glassmorphism
+$glass-bg: rgba(255, 255, 255, 0.05);
+$glass-border: rgba(255, 255, 255, 0.1);
+$glass-blur: 10px;
+
+// Typography
+$font-sans: 'Inter', 'Calibre', 'San Francisco', 'SF Pro Text', -apple-system, system-ui, sans-serif;
+$font-mono: 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+
+// Transitions
+$transition-fast: 0.2s ease-in-out;
+$transition-normal: 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+// Breakpoints
+$bp-mobile: 480px;
+$bp-tablet: 768px;
+$bp-laptop: 1024px;
+$bp-desktop: 1200px;

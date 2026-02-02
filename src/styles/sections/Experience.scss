@@ -1,0 +1,116 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.experience {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 100px 0;
+
+    @include mobile {
+        padding: 60px 25px;
+    }
+
+    .section-title {
+        font-size: 32px;
+        color: $color-text-primary;
+        margin-bottom: 50px;
+        display: flex;
+        align-items: center;
+
+        &::after {
+            content: "";
+            display: block;
+            width: 300px;
+            height: 1px;
+            background: $color-bg-lighter;
+            margin-left: 20px;
+
+            @include mobile {
+                width: 50px;
+            }
+        }
+    }
+
+    &__container {
+        padding-left: 20px;
+        border-left: 2px solid $color-bg-lighter;
+
+        @include mobile {
+            padding-left: 15px;
+        }
+    }
+
+    &__item {
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: -27px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: $color-primary;
+
+            @include mobile {
+                left: -22px;
+            }
+        }
+    }
+
+    &__header {
+        margin-bottom: 5px;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    &__role {
+        display: inline-block;
+        color: $color-text-primary;
+        margin-right: 8px;
+        font-size: 22px; // Increased size
+        font-weight: 600;
+
+        @include mobile {
+            display: block; // Stack on mobile
+            margin-bottom: 5px;
+        }
+    }
+
+    &__company {
+        color: $color-primary;
+        font-family: $font-mono;
+        font-size: 20px;
+
+        &::before {
+            content: "@";
+            margin-right: 5px;
+        }
+    }
+
+    &__duration {
+        font-family: $font-mono;
+        font-size: 14px; // Slightly larger
+        color: $color-text-secondary;
+        margin-bottom: 25px;
+        letter-spacing: 0.5px;
+    }
+
+    &__list {
+        li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: $color-text-secondary;
+
+            &::before {
+                content: "▹";
+                position: absolute;
+                left: 0;
+                color: $color-primary;
+            }
+        }
+    }
+}
