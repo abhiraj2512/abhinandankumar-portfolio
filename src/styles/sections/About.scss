@@ -1,0 +1,110 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.about {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 100px 0;
+
+    @include mobile {
+        padding: 60px 25px;
+    }
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        font-size: 32px;
+        color: $color-text-primary;
+        margin-bottom: 40px;
+
+        &::after {
+            content: "";
+            display: block;
+            width: 300px;
+            height: 1px;
+            background: $color-bg-lighter;
+            margin-left: 20px;
+
+            @include mobile {
+                width: 100px;
+            }
+        }
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 3fr 2fr;
+        gap: 50px;
+
+        @include laptop {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__text {
+        p {
+            margin-bottom: 20px;
+            color: $color-text-secondary;
+            font-size: 18px;
+        }
+    }
+
+    &__skills-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(140px, 200px));
+        gap: 10px;
+        padding: 0;
+        margin: 20px 0 0 0;
+        overflow: hidden;
+        list-style: none;
+
+        li {
+            position: relative;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            font-family: $font-mono;
+            font-size: 14px;
+            color: $color-text-primary; // Using primary text now or should be primary color?
+
+            &::before {
+                content: "▹";
+                position: absolute;
+                left: 0;
+                color: $color-primary;
+                font-size: 14px;
+                line-height: 12px;
+            }
+        }
+    }
+
+    &__img {
+        position: relative;
+        max-width: 300px;
+
+        @include laptop {
+            margin: 50px auto 0;
+            width: 70%;
+        }
+
+        .img-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 4px;
+            // Removed background color and frame effect as requested
+
+            img {
+                width: 100%;
+                height: auto;
+                display: block; // Removes bottom space
+                border-radius: 4px;
+                transition: all $transition-fast;
+                position: relative;
+                z-index: 1;
+
+                &:hover {
+                    transform: scale(1.02); // Optional: Slight zoom on hover for interactivity
+                }
+            }
+        }
+    }
+}

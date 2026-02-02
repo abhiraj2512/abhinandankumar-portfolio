@@ -1,0 +1,37 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.btn {
+    @include flex-center;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: $font-mono;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    transition: all $transition-fast;
+
+    &--primary {
+        background: color-mix(in srgb, var(--color-primary), transparent 90%); // Subtle background
+        color: $color-primary;
+        border: 1px solid $color-primary;
+
+        &:hover {
+            background: color-mix(in srgb, var(--color-primary), transparent 80%);
+            transform: translateY(-2px);
+        }
+    }
+
+    &--outline {
+        background: transparent;
+        color: $color-primary;
+        border: 1px solid $color-primary;
+
+        &:hover {
+            background: rgba($color-primary, 0.1);
+        }
+    }
+}

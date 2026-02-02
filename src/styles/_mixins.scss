@@ -1,0 +1,39 @@
+@use 'variables' as *;
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin flex-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+@mixin mobile {
+    @media (max-width: #{$bp-tablet}) {
+        @content;
+    }
+}
+
+@mixin laptop {
+    @media (max-width: #{$bp-laptop}) {
+        @content;
+    }
+}
+
+@mixin glass {
+    background: $glass-bg;
+    backdrop-filter: blur($glass-blur);
+    -webkit-backdrop-filter: blur($glass-blur);
+    border: 1px solid $glass-border;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+@mixin gradient-text {
+    background: linear-gradient(135deg, $color-primary 0%, #fff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
