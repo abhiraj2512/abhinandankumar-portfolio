@@ -50,14 +50,15 @@ export const content = {
             tech: ['Python', 'NLP', 'React'],
             github: 'https://github.com/abhiraj2512/Sentiment-Anlaysis-Project-main',
             external: null, // Code only
+            disableLiveDemo: true
         },
         {
             title: 'Personal Portfolio',
             description: 'You are looking at it! Built with performance and accessibility in mind.',
             tech: ['React', 'TypeScript', 'Framer Motion'],
-            github: null,
-            external: null,
-            comingSoon: true
+            github: 'https://github.com/abhiraj2512/abhinandankumar-portfolio',
+            external: 'https://abhinandankumar-portfolio.vercel.app/',
+            comingSoon: false
         }
     ],
     contact: {

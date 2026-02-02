@@ -1,7 +1,8 @@
 import React from 'react';
 import SectionWrapper from '../components/SectionWrapper';
 import { content } from '../data/content';
-import { FaGithub, FaExternalLinkAlt, FaFolder } from 'react-icons/fa';
+import { FaFolder } from 'react-icons/fa';
+import Button from '../components/Button';
 import '../styles/sections/Projects.scss';
 
 // Mock projects if content doesn't have them yet
@@ -28,16 +29,6 @@ const Projects: React.FC = () => {
                                     <FaFolder />
                                 </div>
                                 <div className="links">
-                                    {project.github && !isComingSoon && (
-                                        <a href={project.github} target="_blank" rel="noopener noreferrer" title="View Code">
-                                            <FaGithub />
-                                        </a>
-                                    )}
-                                    {project.external && !isComingSoon && (
-                                        <a href={project.external} target="_blank" rel="noopener noreferrer" title="Live Site">
-                                            <FaExternalLinkAlt />
-                                        </a>
-                                    )}
                                     {isComingSoon && <span className="coming-soon-label">Coming Soon</span>}
                                 </div>
                             </div>
@@ -58,6 +49,36 @@ const Projects: React.FC = () => {
                                     <li key={j}>{tech}</li>
                                 ))}
                             </ul>
+
+                            <div className="project-card__actions">
+                                {(project.external || project.disableLiveDemo) && !isComingSoon && (
+                                    <div className={`action-wrapper ${project.disableLiveDemo ? 'disabled-wrapper' : ''}`}
+                                        data-tooltip={project.disableLiveDemo ? "Coming live soon" : undefined}
+                                    >
+                                        <Button
+                                            href={project.disableLiveDemo ? undefined : project.external}
+                                            variant="primary"
+                                            target={project.disableLiveDemo ? undefined : "_blank"}
+                                            rel={project.disableLiveDemo ? undefined : "noopener noreferrer"}
+                                            className={`project-btn ${project.disableLiveDemo ? 'btn--disabled' : ''}`}
+                                            disabled={project.disableLiveDemo}
+                                        >
+                                            Live Demo
+                                        </Button>
+                                    </div>
+                                )}
+                                {project.github && !isComingSoon && (
+                                    <Button
+                                        href={project.github}
+                                        variant="outline"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="project-btn"
+                                    >
+                                        GitHub
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     );
                 })}
