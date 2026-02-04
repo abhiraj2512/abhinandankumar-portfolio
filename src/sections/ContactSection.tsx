@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import SectionWrapper from '../components/SectionWrapper';
 import { content } from '../data/content';
 import Button from '../components/Button';
@@ -12,8 +13,10 @@ const Contact: React.FC = () => {
         email: '',
         message: ''
     });
-    const [isSubmitting, setIsSubmitting] = React.useState(false);
-    const [isSuccess, setIsSuccess] = React.useState(false);
+    const [status, setStatus] = React.useState<{
+        type: 'idle' | 'loading' | 'success' | 'error';
+        message: string;
+    }>({ type: 'idle', message: '' });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -25,17 +28,46 @@ const Contact: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsSubmitting(true);
+        setStatus({ type: 'loading', message: '' });
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        if (!formData.phone.trim()) {
+            setStatus({ type: 'error', message: 'Phone number is required' });
+            return;
+        }
 
-        setIsSubmitting(false);
-        setIsSuccess(true);
-        setFormData({ name: '', phone: '', email: '', message: '' });
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-        // Reset success message after 5 seconds
-        setTimeout(() => setIsSuccess(false), 5000);
+            console.log('🚀 About to make API call to:', `${apiUrl}/api/contact`);
+            console.log('📦 Request data:', formData);
+
+            const response = await axios.post(`${apiUrl}/api/contact`, formData);
+
+            console.log('✅ Response received:', response);
+            console.log('📊 Response status:', response.status);
+            console.log('📄 Response data:', response.data);
+
+            setStatus({ type: 'success', message: response.data.message || 'Message sent successfully!' });
+            setFormData({ name: '', phone: '', email: '', message: '' });
+
+            // Reset success message after 5 seconds
+            setTimeout(() => {
+                setStatus({ type: 'idle', message: '' });
+            }, 5000);
+        } catch (error: any) {
+            console.error('Contact submission error:', error);
+            let errorMessage = 'Something went wrong. Please try again.';
+
+            if (error.response?.data?.error) {
+                errorMessage = error.response.data.error;
+            } else if (error.response?.data?.message) {
+                errorMessage = error.response.data.message;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
+            setStatus({ type: 'error', message: errorMessage });
+        }
     };
 
     return (
@@ -53,6 +85,7 @@ const Contact: React.FC = () => {
                         value={formData.name}
                         onChange={handleChange}
                         required
+                        disabled={status.type === 'loading'}
                     />
                 </div>
                 <div className="form-group">
@@ -62,6 +95,8 @@ const Contact: React.FC = () => {
                         placeholder="Your Phone"
                         value={formData.phone}
                         onChange={handleChange}
+                        required
+                        disabled={status.type === 'loading'}
                     />
                 </div>
                 <div className="form-group">
@@ -72,6 +107,7 @@ const Contact: React.FC = () => {
                         value={formData.email}
                         onChange={handleChange}
                         required
+                        disabled={status.type === 'loading'}
                     />
                 </div>
                 <div className="form-group full-width">
@@ -82,16 +118,17 @@ const Contact: React.FC = () => {
                         value={formData.message}
                         onChange={handleChange}
                         required
+                        disabled={status.type === 'loading'}
                     ></textarea>
                 </div>
 
-                <Button className="submit-btn" disabled={isSubmitting}>
-                    {isSubmitting ? 'Sending...' : 'Send Message'}
+                <Button className="submit-btn" disabled={status.type === 'loading'}>
+                    {status.type === 'loading' ? 'Sending...' : 'Send Message'}
                 </Button>
 
-                {isSuccess && (
-                    <div className="success-message">
-                        Message sent successfully!
+                {status.message && (
+                    <div className={`status-message ${status.type}`}>
+                        {status.message}
                     </div>
                 )}
             </form>
