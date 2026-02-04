@@ -7,6 +7,7 @@ import Skills from './sections/SkillsSection';
 import Projects from './sections/ProjectsSection';
 import Contact from './sections/ContactSection';
 import SiteFooter from './components/SiteFooter';
+import ScrollToTop from './components/ScrollToTop';
 
 const App = () => {
   const [theme, setTheme] = useState('dark');
@@ -38,6 +39,7 @@ const App = () => {
         <Projects />
         <Contact />
       </main>
+      <ScrollToTop />
       <SiteFooter />
     </div>
   );

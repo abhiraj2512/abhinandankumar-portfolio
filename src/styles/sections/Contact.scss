@@ -92,6 +92,15 @@
                     color: $color-text-secondary;
                     opacity: 0.6;
                 }
+
+                &:-webkit-autofill,
+                &:-webkit-autofill:hover,
+                &:-webkit-autofill:focus,
+                &:-webkit-autofill:active {
+                    -webkit-text-fill-color: $color-text-primary;
+                    transition: background-color 5000s ease-in-out 0s;
+                    box-shadow: 0 0 0 1000px color-mix(in srgb, var(--color-primary), transparent 97%) inset;
+                }
             }
 
             textarea {
