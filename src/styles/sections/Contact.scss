@@ -116,16 +116,26 @@
             min-width: 200px;
         }
 
-        .success-message {
+        .status-message {
             grid-column: 1 / -1;
             margin-top: 20px;
             padding: 15px;
-            background: rgba($color-primary, 0.1);
-            border: 1px solid $color-primary;
             border-radius: 4px;
-            color: $color-primary;
             font-family: $font-mono;
             font-size: 14px;
+
+            &.success {
+                background: rgba(var(--color-primary), 0.1); // variable usage correction if needed, but keeping previous variable syntax
+                background: rgba($color-primary, 0.1);
+                border: 1px solid $color-primary;
+                color: $color-primary;
+            }
+
+            &.error {
+                background: rgba(255, 100, 100, 0.1);
+                border: 1px solid #ff6464;
+                color: #ff6464;
+            }
         }
     }
 }
