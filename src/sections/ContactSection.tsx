@@ -37,15 +37,7 @@ const Contact: React.FC = () => {
 
         try {
             const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
-            console.log('🚀 About to make API call to:', `${apiUrl}/api/contact`);
-            console.log('📦 Request data:', formData);
-
             const response = await axios.post(`${apiUrl}/api/contact`, formData);
-
-            console.log('✅ Response received:', response);
-            console.log('📊 Response status:', response.status);
-            console.log('📄 Response data:', response.data);
 
             setStatus({ type: 'success', message: response.data.message || 'Message sent successfully!' });
             setFormData({ name: '', phone: '', email: '', message: '' });
