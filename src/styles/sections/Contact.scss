@@ -125,7 +125,6 @@
             font-size: 14px;
 
             &.success {
-                background: rgba(var(--color-primary), 0.1); // variable usage correction if needed, but keeping previous variable syntax
                 background: rgba($color-primary, 0.1);
                 border: 1px solid $color-primary;
                 color: $color-primary;
