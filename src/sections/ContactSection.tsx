@@ -1,8 +1,8 @@
 import React from 'react';
-import axios from 'axios';
 import SectionWrapper from '../components/SectionWrapper';
 import { content } from '../data/content';
 import Button from '../components/Button';
+import { sendContactMessage } from '../services/contactService';
 import '../styles/sections/Contact.scss';
 
 const Contact: React.FC = () => {
@@ -34,12 +34,10 @@ const Contact: React.FC = () => {
             setStatus({ type: 'error', message: 'Phone number is required' });
             return;
         }
-
         try {
-            const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-            const response = await axios.post(`${apiUrl}/api/v1/contact`, formData);
+            const successMessage = await sendContactMessage(formData);
 
-            setStatus({ type: 'success', message: response.data.message || 'Message sent successfully!' });
+            setStatus({ type: 'success', message: successMessage });
             setFormData({ name: '', phone: '', email: '', message: '' });
 
             // Reset success message after 5 seconds
@@ -48,17 +46,7 @@ const Contact: React.FC = () => {
             }, 5000);
         } catch (error: any) {
             console.error('Contact submission error:', error);
-            let errorMessage = 'Something went wrong. Please try again.';
-
-            if (error.response?.data?.error) {
-                errorMessage = error.response.data.error;
-            } else if (error.response?.data?.message) {
-                errorMessage = error.response.data.message;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-
-            setStatus({ type: 'error', message: errorMessage });
+            setStatus({ type: 'error', message: error.message });
         }
     };
 
