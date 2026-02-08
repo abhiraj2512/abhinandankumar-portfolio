@@ -1,0 +1,54 @@
+@use '../variables' as *;
+@use '../mixins' as *;
+
+.admin-auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: $color-bg;
+    padding: 20px;
+
+    .admin-auth-card {
+        background: color-mix(in srgb, var(--color-primary), transparent 95%);
+        border: 1px solid color-mix(in srgb, var(--color-primary), transparent 85%);
+        padding: 40px;
+        border-radius: 12px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+        h2 {
+            color: $color-text-primary;
+            margin-bottom: 30px;
+            font-size: 24px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid color-mix(in srgb, var(--color-text-primary), transparent 80%);
+            border-radius: 6px;
+            color: $color-text-primary;
+            font-size: 16px;
+
+            &:focus {
+                outline: none;
+                border-color: $color-primary;
+            }
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn {
+            width: 100%;
+        }
+    }
+}
