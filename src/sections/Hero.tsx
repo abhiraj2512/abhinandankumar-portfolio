@@ -47,6 +47,7 @@ const Hero: React.FC = () => {
         typeSpeed: 100,
         deleteSpeed: 50,
         delaySpeed: 1500,
+        startDelay: 2500, // Wait for name animation to settle (stagger + duration)
     });
 
     return (
@@ -81,7 +82,7 @@ const Hero: React.FC = () => {
                     transition={{ delay: 1.5 }}
                 >
                     <span>{text}</span>
-                    <span className="hero__cursor">|</span>
+                    <span className="hero__cursor" style={{ opacity: text ? 1 : 0 }}>|</span>
                 </motion.h2>
 
                 <motion.p

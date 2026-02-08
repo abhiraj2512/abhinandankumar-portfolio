@@ -6,6 +6,7 @@ interface TypewriterOptions {
     typeSpeed?: number;
     deleteSpeed?: number;
     delaySpeed?: number;
+    startDelay?: number;
 }
 
 export const useTypewriter = ({
@@ -14,11 +15,21 @@ export const useTypewriter = ({
     typeSpeed = 100,
     deleteSpeed = 50,
     delaySpeed = 2000,
+    startDelay = 0,
 }: TypewriterOptions) => {
     const [text, setText] = useState('');
     const [isDeleting, setIsDeleting] = useState(false);
     const [loopNum, setLoopNum] = useState(0);
     const [typingSpeed, setTypingSpeed] = useState(typeSpeed);
+    const [hasStarted, setHasStarted] = useState(false);
+
+    // Initial start delay to wait for other animations
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setHasStarted(true);
+        }, startDelay);
+        return () => clearTimeout(timer);
+    }, [startDelay]);
 
     // Explicitly use loop to satisfy linter (or remove if logic doesn't strictly need it, but here it drives the index)
     useEffect(() => {
@@ -26,6 +37,8 @@ export const useTypewriter = ({
     }, [loop]);
 
     useEffect(() => {
+        if (!hasStarted) return;
+
         let timer: ReturnType<typeof setTimeout>;
 
         const handleType = () => {
@@ -55,7 +68,7 @@ export const useTypewriter = ({
         timer = setTimeout(handleType, typingSpeed);
 
         return () => clearTimeout(timer);
-    }, [text, isDeleting, loopNum, words, typeSpeed, deleteSpeed, delaySpeed]);
+    }, [text, isDeleting, loopNum, words, typeSpeed, deleteSpeed, delaySpeed, hasStarted]);
 
     return [text];
 };
