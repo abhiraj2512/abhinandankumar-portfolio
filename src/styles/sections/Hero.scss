@@ -55,6 +55,7 @@
         color: $color-text-secondary;
         line-height: 0.9;
         margin-bottom: 20px;
+        min-height: 1.2em; // Prevent layout shift
 
         @include laptop {
             font-size: 60px;
@@ -62,6 +63,26 @@
 
         @include mobile {
             font-size: 35px;
+        }
+    }
+
+    &__cursor {
+        display: inline-block;
+        font-weight: 400;
+        color: $color-primary;
+        animation: blink 1s step-end infinite;
+        margin-left: 5px;
+    }
+
+    @keyframes blink {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0;
         }
     }
 

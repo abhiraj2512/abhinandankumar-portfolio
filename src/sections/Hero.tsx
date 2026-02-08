@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Button from '../components/Button';
 import { content } from '../data/content';
+import { useTypewriter } from '../hooks/useTypewriter';
 import '../styles/sections/Hero.scss';
 
 const Hero: React.FC = () => {
@@ -39,6 +40,15 @@ const Hero: React.FC = () => {
         },
     } as const;
 
+    // Typewriter effect for roles
+    const [text] = useTypewriter({
+        words: ["Frontend Developer", "Freelancer", "Full Stack Developer"],
+        loop: true,
+        typeSpeed: 100,
+        deleteSpeed: 50,
+        delaySpeed: 1500,
+    });
+
     return (
         <section id="hero" className="hero">
             <div className="hero__content">
@@ -68,9 +78,10 @@ const Hero: React.FC = () => {
                     className="hero__subtitle"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 1.5 }} // delay to wait for name animation
+                    transition={{ delay: 1.5 }}
                 >
-                    {hero.subtitle}
+                    <span>{text}</span>
+                    <span className="hero__cursor">|</span>
                 </motion.h2>
 
                 <motion.p
