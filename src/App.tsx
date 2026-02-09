@@ -27,6 +27,17 @@ const App = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
+  // Force scroll to top on refresh/load
+  useEffect(() => {
+    // Prevent browser from restoring scroll position
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+
+    // Scroll to top immediately
+    window.scrollTo(0, 0);
+  }, []);
+
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };

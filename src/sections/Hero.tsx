@@ -47,7 +47,7 @@ const Hero: React.FC = () => {
         typeSpeed: 100,
         deleteSpeed: 50,
         delaySpeed: 1500,
-        startDelay: 2500, // Wait for name animation to settle (stagger + duration)
+        startDelay: 2000, // Wait for name animation to settle (stagger + duration)
     });
 
     return (
