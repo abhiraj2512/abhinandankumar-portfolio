@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAdminKey, getAdminContacts, clearAdminKey } from '../services/adminService';
+import { getAdminKey, getAdminContacts, clearAdminKey, getAdminSummary, exportContactsCSV } from '../services/adminService';
 import AdminAuth from '../components/AdminAuth';
 import Button from '../components/Button';
 import '../styles/sections/Admin.scss';
@@ -18,7 +18,9 @@ const Admin: React.FC = () => {
     // 1. Single source of truth: sessionStorage
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!getAdminKey());
     const [contacts, setContacts] = useState<Contact[]>([]);
+    const [adminSummary, setAdminSummary] = useState<any>(null); // Using any to avoid importing extra types for now, can refine
     const [loading, setLoading] = useState<boolean>(false);
+    const [exportLoading, setExportLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
     const [page, setPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number>(1);
@@ -28,11 +30,17 @@ const Admin: React.FC = () => {
         setLoading(true);
         setError('');
         try {
-            const response = await getAdminContacts(currentPage);
-            setContacts(response.data);
-            setTotalPages(response.meta.totalPages);
+            // Parallel execution for better performance
+            const [contactsRes, summaryRes] = await Promise.all([
+                getAdminContacts(currentPage),
+                getAdminSummary()
+            ]);
+
+            setContacts(contactsRes.data);
+            setTotalPages(contactsRes.meta.totalPages);
+            setAdminSummary(summaryRes.data);
         } catch (err: any) {
-            setError(err.message || 'Failed to load contacts');
+            setError(err.message || 'Failed to load data');
             // Only logout if explicitly unauthorized (checked via service error message)
             if (err.message === 'Session expired or invalid key') {
                 setIsAuthenticated(false);
@@ -58,7 +66,19 @@ const Admin: React.FC = () => {
         clearAdminKey();
         setIsAuthenticated(false);
         setContacts([]);
+        setAdminSummary(null);
         setPage(1);
+    };
+
+    const handleExport = async () => {
+        setExportLoading(true);
+        try {
+            await exportContactsCSV();
+        } catch (err: any) {
+            alert(err.message || 'Failed to export CSV');
+        } finally {
+            setExportLoading(false);
+        }
     };
 
     if (!isAuthenticated) {
@@ -68,12 +88,49 @@ const Admin: React.FC = () => {
     return (
         <div className="admin-dashboard">
             <header className="admin-header">
-                <h1>Admin Dashboard</h1>
-                <Button className="logout-btn" onClick={handleLogout}>Logout</Button>
+                <div className="header-left">
+                    <h1>Admin Dashboard</h1>
+                </div>
+                <div className="header-right">
+                    <Button
+                        className="export-btn"
+                        onClick={handleExport}
+                        disabled={exportLoading}
+                    >
+                        {exportLoading ? 'Downloading...' : 'Export CSV'}
+                    </Button>
+                    <Button className="logout-btn" onClick={handleLogout}>Logout</Button>
+                </div>
             </header>
 
             <div className="admin-content">
                 {error && <div className="error-banner">{error}</div>}
+
+                {/* Summary Section */}
+                {adminSummary && (
+                    <div className="admin-summary">
+                        <div className="summary-card">
+                            <h3>Total Contacts</h3>
+                            <div className="value">{adminSummary.total}</div>
+                        </div>
+                        <div className="summary-card">
+                            <h3>Last 7 Days</h3>
+                            <div className="value">{adminSummary.last7Days}</div>
+                        </div>
+                        <div className="summary-card">
+                            <h3>Last 30 Days</h3>
+                            <div className="value">{adminSummary.last30Days}</div>
+                        </div>
+                        <div className="summary-card">
+                            <h3>Latest Activity</h3>
+                            <div className="value date">
+                                {adminSummary.latestActivity
+                                    ? new Date(adminSummary.latestActivity).toLocaleDateString()
+                                    : 'N/A'}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {loading ? (
                     <div className="loading-state">Loading contacts...</div>

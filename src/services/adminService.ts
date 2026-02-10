@@ -81,3 +81,93 @@ export const getAdminContacts = async (page: number = 1, limit: number = 10): Pr
         throw new Error('Failed to fetch contacts');
     }
 };
+
+export interface AdminSummaryData {
+    total: number;
+    last7Days: number;
+    last30Days: number;
+    latestActivity: string | null;
+}
+
+export interface AdminSummaryResponse {
+    data: AdminSummaryData;
+}
+
+/**
+ * Fetches admin summary statistics.
+ */
+export const getAdminSummary = async (): Promise<AdminSummaryResponse> => {
+    const key = getAdminKey();
+
+    if (!key) {
+        throw new Error('Admin authentication required');
+    }
+
+    try {
+        const response = await axios.get<AdminSummaryResponse>(`${API_BASE_URL}/api/v1/admin/summary`, {
+            headers: {
+                'x-admin-key': key
+            }
+        });
+        return response.data;
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            const status = error.response?.status;
+            if (status === 401 || status === 403) {
+                clearAdminKey();
+                throw new Error('Session expired or invalid key');
+            }
+            if (error.response?.data?.message) {
+                throw new Error(error.response.data.message);
+            }
+        }
+        throw new Error('Failed to fetch summary');
+    }
+};
+
+/**
+ * Triggers CSV export of contacts.
+ */
+export const exportContactsCSV = async (): Promise<void> => {
+    const key = getAdminKey();
+
+    if (!key) {
+        throw new Error('Admin authentication required');
+    }
+
+    try {
+        const response = await axios.get(`${API_BASE_URL}/api/v1/admin/contacts/export`, {
+            headers: {
+                'x-admin-key': key
+            },
+            responseType: 'blob' // Important for file download
+        });
+
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'contacts_export.csv');
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up
+        link.parentNode?.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            const status = error.response?.status;
+            if (status === 401 || status === 403) {
+                clearAdminKey();
+                throw new Error('Session expired or invalid key');
+            }
+            if (error.response?.data?.message) {
+                // Try to read blob as text to get error message
+                // This is a bit complex with blobs, defaulting to generic error is safer for now
+                throw new Error('Failed to export contacts');
+            }
+        }
+        throw new Error('Failed to export CSV');
+    }
+};
