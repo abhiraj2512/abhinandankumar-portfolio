@@ -19,12 +19,12 @@ const Projects: React.FC = () => {
     };
 
     const cardVariants: Variants = {
-        hidden: { opacity: 0, y: 50 },
+        hidden: { opacity: 0, y: 30 },
         visible: {
             opacity: 1,
             y: 0,
             transition: {
-                duration: 0.6,
+                duration: 0.5,
                 ease: "easeOut"
             }
         }
@@ -51,22 +51,20 @@ const Projects: React.FC = () => {
             >
                 {projects.map((project: any, i: number) => {
                     const isComingSoon = project.comingSoon;
-                    const isFeatured = i === 0; // First project is featured
+                    const isFeatured = i === 0;
 
                     return (
                         <motion.div
                             key={i}
                             className={`project-card ${isFeatured ? 'featured-card' : ''} ${isComingSoon ? 'project-card--disabled' : ''}`}
                             variants={cardVariants}
-                            whileHover={{ y: -10 }} // Framer motion hover lift
+                            whileHover={{ y: -5 }}
                         >
-                            {/* Background Image */}
                             <div className="project-card__image-container">
                                 <img src={project.image} alt={project.title} className="project-image" />
                                 <div className="project-overlay"></div>
                             </div>
 
-                            {/* Content */}
                             <div className="project-card__content">
                                 <div className="project-header">
                                     <h3 className="project-title">{project.title}</h3>
