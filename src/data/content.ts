@@ -42,7 +42,8 @@ export const content = {
             description: 'A professional website for business showcase. Features modern UI and responsive design.',
             tech: ['React', 'SCSS', 'Netlify'],
             github: 'https://github.com/abhiraj2512/business',
-            external: 'https://tranquil-fairy-dd0144.netlify.app/'
+            external: 'https://tranquil-fairy-dd0144.netlify.app/',
+            image: '/projects/business-website.png'
         },
         {
             title: 'Twitter Sentiment Analysis',
@@ -50,7 +51,8 @@ export const content = {
             tech: ['Python', 'NLP', 'React'],
             github: 'https://github.com/abhiraj2512/Sentiment-Anlaysis-Project-main',
             external: null, // Code only
-            disableLiveDemo: true
+            disableLiveDemo: true,
+            image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2340&auto=format&fit=crop'
         },
         {
             title: 'Personal Portfolio',
@@ -58,7 +60,8 @@ export const content = {
             tech: ['React', 'TypeScript', 'Framer Motion'],
             github: 'https://github.com/abhiraj2512/abhinandankumar-portfolio',
             external: 'https://abhinandankumar-portfolio.vercel.app/',
-            comingSoon: false
+            comingSoon: false,
+            image: '/projects/portfolio.png'
         }
     ],
     contact: {
