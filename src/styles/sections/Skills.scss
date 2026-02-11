@@ -33,71 +33,136 @@
         display: flex;
         flex-direction: column;
         gap: 40px;
-    }
+        width: 100%;
+        overflow: hidden; // Hide scrollbars
+        position: relative;
 
-    &__category {
-        text-align: left;
+        // Fades on sides for premium look
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 100px;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
 
-        &-title {
-            font-size: 18px;
-            color: $color-primary;
-            font-family: $font-mono;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
+        &::before {
+            left: 0;
+            background: linear-gradient(to right, $color-bg, transparent);
+        }
 
-            &::after {
-                content: "";
-                flex: 1;
-                height: 1px;
-                background: $color-bg-lighter;
-                margin-left: 15px;
-            }
+        &::after {
+            right: 0;
+            background: linear-gradient(to left, $color-bg, transparent);
         }
     }
 
-    &__grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 15px;
+    .marquee-row {
+        width: 100%;
+        overflow: hidden;
+        display: flex;
+        position: relative;
+
+        &:hover {
+            .marquee-track {
+                animation-play-state: paused;
+            }
+        }
+
+        .marquee-track {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        &.left .marquee-track {
+            animation-name: scroll-left;
+        }
+
+        &.right .marquee-track {
+            animation-name: scroll-right;
+        }
     }
 
     .skill-card {
         background: $color-bg-light;
-        padding: 15px;
-        border-radius: 4px;
+        padding: 15px 25px;
+        border-radius: 8px;
         transition: all $transition-fast;
         display: flex;
         align-items: center;
         gap: 12px;
         cursor: default;
-        border: 1px solid transparent;
+        border: 1px solid rgba($color-primary, 0.05);
+        flex-shrink: 0; // Prevent squishing
+        min-width: 160px;
+        justify-content: center;
 
-        &:hover {
-            transform: translateY(-3px);
-            border-color: $color-primary;
-            background: rgba($color-primary, 0.05);
+        // Specific high-contrast overrides for Light Mode
+        @at-root [data-theme='light'] & {
+            background: #ffffff; // White card on off-white background? No, Page is white. 
+            // Let's keep bg-light (#f4f4f4) but add stronger border/shadow
+            background: $color-bg-light;
+            border-color: rgba($color-primary, 0.15); // Stronger border
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); // Subtle shadow for lift
 
-            .skill-icon {
-                color: $color-primary;
-                transform: scale(1.1);
+            p {
+                color: $color-primary; // Force dark blue
+                font-weight: 600; // Slightly bolder
             }
         }
 
+        // No default hover here, handled by framer-motion in JS for "interactions" requirement
+        // But we keep basic structure styles
+
         .skill-icon {
             font-size: 24px;
-            color: $color-text-secondary;
-            transition: all $transition-fast;
+            color: $color-primary; // Always primary for visibility
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         p {
-            font-family: $font-sans;
+            font-family: $font-mono;
             font-size: 14px;
             color: $color-text-primary;
             font-weight: 500;
+            white-space: nowrap;
         }
+    }
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%); // Adjust based on duplication logic. 
+        // If we duplicate 4 times using [...items, ...items, ...items, ...items], 
+        // a full cycle of "unique items" is 25% of the width.
+        // Wait, if we want seamless loop of "items", we need to shift by the width of ONE set.
+        // If we have 4 sets, shifting by -25% moves one full set.
+        // Let's rely on visual observation or use -25% logic if evenly distributed.
+        // Actually, easiest is: duplicate content ONCE (A B C A B C), shift to -50%.
+        // I duplicated 4 times in JS to be safe for wide screens.
+        // So I should shift by -25% to loop seamlessly.
+        transform: translateX(-25%);
+    }
+}
+
+@keyframes scroll-right {
+    0% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(0);
     }
 }
