@@ -108,24 +108,24 @@ const Admin: React.FC = () => {
 
                 {/* Summary Section */}
                 {adminSummary && (
-                    <div className="admin-summary">
-                        <div className="summary-card">
+                    <div className="stats-grid">
+                        <div className="stat-card">
                             <h3>Total Contacts</h3>
                             <div className="value">{adminSummary.total}</div>
                         </div>
-                        <div className="summary-card">
+                        <div className="stat-card">
                             <h3>Last 7 Days</h3>
                             <div className="value">{adminSummary.last7Days}</div>
                         </div>
-                        <div className="summary-card">
+                        <div className="stat-card">
                             <h3>Last 30 Days</h3>
                             <div className="value">{adminSummary.last30Days}</div>
                         </div>
-                        <div className="summary-card">
+                        <div className="stat-card">
                             <h3>Latest Activity</h3>
                             <div className="value date">
                                 {adminSummary.latestActivity
-                                    ? new Date(adminSummary.latestActivity).toLocaleDateString()
+                                    ? new Date(adminSummary.latestActivity).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
                                     : 'N/A'}
                             </div>
                         </div>
@@ -137,43 +137,69 @@ const Admin: React.FC = () => {
                 ) : contacts.length === 0 ? (
                     <div className="empty-state">No contact submissions found.</div>
                 ) : (
-                    <>
+                    <div className="table-card">
                         <div className="table-container">
                             <table className="contacts-table">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Phone</th>
+                                        <th>Date & Time</th>
+                                        <th>Sender</th>
+                                        <th>Contact Info</th>
                                         <th>Message</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {contacts.map((contact) => (
-                                        <tr key={contact._id}>
-                                            <td className="date-col">
-                                                {new Intl.DateTimeFormat('en-US', {
-                                                    day: 'numeric',
-                                                    month: 'short',
-                                                    year: 'numeric',
-                                                    hour: '2-digit',
-                                                    minute: '2-digit',
-                                                    hour12: true
-                                                }).format(new Date(contact.createdAt)).replace(',', ' •')}
-                                            </td>
-                                            <td className="name-col">{contact.name}</td>
-                                            <td className="email-col">
-                                                <a href={`mailto:${contact.email}`}>{contact.email}</a>
-                                            </td>
-                                            <td className="phone-col">{contact.phone}</td>
-                                            <td className="message-col" title={contact.message}>
-                                                {contact.message.length > 50
-                                                    ? `${contact.message.substring(0, 50)}...`
-                                                    : contact.message}
-                                            </td>
-                                        </tr>
-                                    ))}
+                                    {contacts.map((contact) => {
+                                        const date = new Date(contact.createdAt);
+                                        const now = new Date();
+                                        const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+                                        let relativeTime = '';
+
+                                        if (diffInHours < 24) {
+                                            if (diffInHours === 0) relativeTime = 'Just now';
+                                            else relativeTime = `${diffInHours} hours ago`;
+                                        } else {
+                                            const diffInDays = Math.floor(diffInHours / 24);
+                                            relativeTime = `${diffInDays} days ago`;
+                                        }
+
+                                        return (
+                                            <tr key={contact._id}>
+                                                <td className="date-col">
+                                                    <div className="date-wrapper">
+                                                        <span className="primary-date">
+                                                            {new Intl.DateTimeFormat('en-US', {
+                                                                day: 'numeric',
+                                                                month: 'short',
+                                                                year: 'numeric'
+                                                            }).format(date)}
+                                                        </span>
+                                                        <span className="secondary-time">
+                                                            {new Intl.DateTimeFormat('en-US', {
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                                hour12: true
+                                                            }).format(date)} • {relativeTime}
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td className="name-col">{contact.name}</td>
+                                                <td className="contact-col">
+                                                    <div className="contact-details">
+                                                        <a href={`mailto:${contact.email}`} className="email-link">{contact.email}</a>
+                                                        <span className="phone-number">{contact.phone}</span>
+                                                    </div>
+                                                </td>
+                                                <td className="message-col">
+                                                    <div className="message-content" title={contact.message}>
+                                                        {contact.message.length > 80
+                                                            ? `${contact.message.substring(0, 80)}...`
+                                                            : contact.message}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </div>
@@ -185,7 +211,7 @@ const Admin: React.FC = () => {
                             >
                                 Previous
                             </button>
-                            <span>Page {page} of {totalPages}</span>
+                            <span className="page-info">Page {page} of {totalPages}</span>
                             <button
                                 disabled={page === totalPages}
                                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
@@ -193,7 +219,7 @@ const Admin: React.FC = () => {
                                 Next
                             </button>
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
         </div>
