@@ -153,7 +153,14 @@ const Admin: React.FC = () => {
                                     {contacts.map((contact) => (
                                         <tr key={contact._id}>
                                             <td className="date-col">
-                                                {new Date(contact.createdAt).toLocaleDateString()}
+                                                {new Intl.DateTimeFormat('en-US', {
+                                                    day: 'numeric',
+                                                    month: 'short',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit',
+                                                    hour12: true
+                                                }).format(new Date(contact.createdAt)).replace(',', ' •')}
                                             </td>
                                             <td className="name-col">{contact.name}</td>
                                             <td className="email-col">

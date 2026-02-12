@@ -154,8 +154,10 @@
                 }
 
                 .date-col {
-                    width: 120px;
+                    width: 180px;
                     color: $color-text-secondary;
+                    font-size: 14px;
+                    white-space: nowrap;
                 }
 
                 .name-col {
